@@ -4,27 +4,13 @@ pipeline {
       timeout(time: 60, unit: 'SECONDS') 
     }
     stages {
-        stage('Compile'){
+        stage('Package'){
             steps{
-                dir ('/Users/imagemaker/Documents/DevOps/modulo3/ejemplo-maven'){
-                    sh './mvnw clean compile -e'  
+                script{
+                	sh './mvnw clean package -e'
                 }
             }
             
-        }
-        stage('Unit'){
-            steps{
-                dir ('/Users/imagemaker/Documents/DevOps/modulo3/ejemplo-maven'){
-                    sh './mvnw clean test -e'  
-                }
-            }
-        }
-        stage('Jar'){
-            steps{
-                dir ('/Users/imagemaker/Documents/DevOps/modulo3/ejemplo-maven'){
-                    sh './mvnw clean package -e'  
-                }
-            }
         }
         stage('sonarQube'){
         	steps{
@@ -34,20 +20,6 @@ pipeline {
 					    }
         		}
         	}
-        }
-        stage('Run'){
-            steps{
-                dir ('/Users/imagemaker/Documents/DevOps/modulo3/ejemplo-maven'){
-                    sh 'nohup bash ./mvnw spring-boot:run &'
-                }
-            }
-        }
-        stage('Test'){
-            steps{
-                dir ('/Users/imagemaker/Documents/DevOps/modulo3/ejemplo-maven'){
-                    sh 'curl -X GET "http://localhost:8080/rest/mscovid/test?msg=testing"'
-                }
-            }
         }
     }
 }
