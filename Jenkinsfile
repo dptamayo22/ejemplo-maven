@@ -17,7 +17,6 @@ pipeline {
                 stage('Jar') {
                     steps {
                             sh './mvnw clean package -e'
-                            sh 'pwd'
                     }
                 }
 
@@ -30,7 +29,7 @@ pipeline {
                         groupId: 'com.devopsusach2020',
                         version: '1.0.1',
                         repository: 'test-nexus',
-                        credentialsId: 'nexus-local',
+                        credentialsId: 'nexus',
                         artifacts: [
                             [artifactId: 'DevOpsUsach2020',
                             classifier: '',
