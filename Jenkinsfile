@@ -33,7 +33,7 @@ pipeline {
                         artifacts: [
                             [artifactId: 'DevOpsUsach2020',
                             classifier: '',
-                            file: 'build/DevOpsUsach2020-1.0.1.jar',
+                            file: '/Users/imagemaker/Documents/DevOps/modulo3/dianela-ejemplo-maven/ejemplo-maven/build/DevOpsUsach2020-1.0.1.jar',
                             type: 'jar']
                         ]
                         )
