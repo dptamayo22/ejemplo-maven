@@ -1,7 +1,7 @@
 pipeline {
     agent any
     options {
-      timeout(time: 60, unit: 'SECONDS')
+      timeout(time: 120, unit: 'SECONDS')
     }
     stages {
                 stage('Compile') {
@@ -20,7 +20,25 @@ pipeline {
                     }
                 }
 
-
+                stage('Nexus Upload'){
+                    steps {
+                        nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: 'localhost:8081',
+                        groupId: 'com.devopsusach2020',
+                        version: '1.0.1',
+                        repository: 'test-nexus',
+                        credentialsId: 'nexus',
+                        artifacts: [
+                            [artifactId: 'DevOpsUsach2020',
+                            classifier: '',
+                            file: '/Users/imagemaker/Documents/DevOps/modulo3/dianela-ejemplo-maven/ejemplo-maven/build/DevOpsUsach2020-1.0.1.jar',
+                            type: 'jar']
+                        ]
+                        )
+                        }
+                }
                 stage('Run') {
                     steps {
                             sh 'nohup bash ./mvnw spring-boot:run &'
