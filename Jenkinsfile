@@ -1,43 +1,13 @@
 pipeline {
     agent any
     options {
-      timeout(time: 120, unit: 'SECONDS')
+      timeout(time: 60, unit: 'SECONDS')
     }
     stages {
-                stage('Compile') {
+                stage('Download') {
                     steps {
-                            sh './mvnw clean compile -e'
+                            sh 'curl -X GET -u admin:admin http://localhost:8081/repository/test-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar -O'
                     }
-                }
-                stage('Unit') {
-                    steps {
-                            sh './mvnw clean test -e'
-                    }
-                }
-                stage('Jar') {
-                    steps {
-                            sh './mvnw clean package -e'
-                    }
-                }
-
-                stage('Nexus Upload'){
-                    steps {
-                        nexusArtifactUploader(
-                        nexusVersion: 'nexus3',
-                        protocol: 'http',
-                        nexusUrl: 'localhost:8081',
-                        groupId: 'com.devopsusach2020',
-                        version: '1.0.1',
-                        repository: 'test-nexus',
-                        credentialsId: 'nexus',
-                        artifacts: [
-                            [artifactId: 'DevOpsUsach2020',
-                            classifier: '',
-                            file: 'build/DevOpsUsach2020-1.0.1.jar',
-                            type: 'jar']
-                        ]
-                        )
-                        }
                 }
                 stage('Run') {
                     steps {
@@ -50,5 +20,38 @@ pipeline {
                             sh 'curl -X GET "http://localhost:8081/rest/mscovid/test?msg=testing"'
                     }
                 }
+                stage('Nexus Upload'){
+                    steps {
+                        nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: 'localhost:8081',
+                        groupId: 'com.devopsusach2020',
+                        version: '1.0.0',
+                        repository: 'test-nexus',
+                        credentialsId: 'nexus',
+                        artifacts: [
+                            [artifactId: 'DevOpsUsach2020',
+                            classifier: '',
+                            file: 'DevOpsUsach2020-0.0.1.jar',
+                            type: 'jar']
+                        ]
+                        )
+                        }
+                }
         }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
